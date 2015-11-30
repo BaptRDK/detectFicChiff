@@ -3,23 +3,22 @@ import sys
 import math
 import os
 import calcEntFic
-import testBrokFic
 
 #02 novembre 9h
 
 try:
         thresEnt = 7.999
 	cible = str(sys.argv[1])
-	seuil = int(sys.argv[2]) * 1000
-	ech = int(sys.argv[3])
+	seuil = int(sys.argv[2]) * 1000000
+	ech = int(sys.argv[3]) * 1000000
         resultats = []
 except:
 	print "argument invalides"
-        print "Usage: " + sys.argv[0] + " [path]directory min_size[Ko] N-first_Bytes_to_be_read"
+        print "Usage: " + sys.argv[0] + " [path]directory min_size[Mo] N-first_Bytes_to_be_read[Mo]"
 	sys.exit()
 #Check the usage, 4 arguments are expected
 if len(sys.argv) <> 4 or seuil <= 0:
-	print "Usage: " + sys.argv[0] + " [path]directory min_size[Ko] N-first_Bytes_to_be_read"
+	print "Usage: " + sys.argv[0] + " [path]directory min_size[Mo] N-first_Bytes_to_be_read[Mo]"
 	sys.exit()
 	
 #check if the given directory exists
@@ -29,7 +28,7 @@ elif not os.path.isdir(cible):
 
 print "Detection de fichiers chiffres"
 print "Exploration de " + cible
-print "Seuls les fichiers de plus de " + str(seuil / 1000) + " Ko seront testes"
+print "Seuls les fichiers de plus de " + str(seuil / 1000000) + " Mo seront testes"
 
 print " Fichiers chiffres detectes: "
 #for each file in the target and its sub directories
@@ -37,7 +36,7 @@ for path, dir, fic in os.walk(cible):
         #for each file
 	for afic in fic:
             tmpPath = os.path.join(path, afic)
-            if not testBrokFic.isFicBrok(tmpPath):
+            if os.path.exists(tmpPath):
                 ficInfo = os.stat(tmpPath)
                 #if the file is bigger than our threshold (third argument)
                 if (seuil) <= ficInfo.st_size:
